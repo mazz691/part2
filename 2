@@ -1,0 +1,67 @@
+import netmiko
+import getpass
+
+
+#adding the username and password and the secret password for when the user logs in 
+info = {
+    'host':'192.168.56.101',
+    'device_type':'',
+    'user': '',
+    'password': '',
+    'secret':''
+}
+
+#user = cisco
+#pass = cisco123!
+#secret = class123!
+
+# adding this code allows the user to enter username password and secret password.
+def login():
+    info["username"] = input ("username")
+    info["password"] = input("password")
+    info["secret"] = input("secret password")
+    server = input("connect SSH (1) connect telnet (2)?")
+    if server == "1":
+        info['device_type'] = "cisco_ios"
+        connect()
+    elif server == "2":
+        info['device_type'] = "cisco_ios_telnet"
+        connect()
+    else:
+        print("Option not found!")
+
+#the code below will allow me to write information to a file.
+
+def savefile (name, data):
+    configfile = open(filename,"w")
+    confgfile.write(data)
+    configfile.close()
+    
+# the next part of the code will alow for the user to select a option if selected option 1 they will be connected to ssh if option 2 they will be connected to telnet with the backup otherwise it will say unavailble.
+
+def connect():
+    session = netmiko.ConnectHandler(**info)
+    session.enable()
+    output = session.send_command('show running-config')
+    print(output)
+    savefile = open("configFile.txt", "w")
+    savefile.write(output)
+    savefile.close()
+   # session.close()
+   # exit()
+    choice = input("interface loopback, (1), result (2) RIP (3)?")
+    if choice = "1":
+        session.send_config_set("int loopback 0", "ip addr 10.10.1.0 255.255.255.255")
+    elif choice = "2":
+        output = session.send_config_set("show ip brief")
+        print(output)
+    elif choice = "3":
+        session.send_config_set("router rip", "network 10.10.1.1")
+        output=session.send_command("show ip route")
+        print (output)
+    else
+        exit()
+           
+if __name___ == "__main__":
+    login()
+
